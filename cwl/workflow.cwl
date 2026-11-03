@@ -44,4 +44,4 @@ $namespaces:
   s: https://schema.org/
 s:softwareVersion: "0.3.2"
 s:version: "0.3.2"
-s:codeRepository: https://github.com/LeonelGL/heatwise-class-guided
+s:codeRepository: https://github.com/ESA-Heatwise/heatwise-class-guided

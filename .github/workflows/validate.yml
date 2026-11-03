@@ -59,8 +59,8 @@ jobs:
         run: |
           python tools/prepare_release.py \
             --version 0.3.2 \
-            --image ghcr.io/leonelgl/heatwise-class-guided:0.3.2 \
-            --repository-url https://github.com/LeonelGL/heatwise-class-guided \
+            --image ghcr.io/esa-heatwise/heatwise-class-guided:0.3.2 \
+            --repository-url https://github.com/ESA-Heatwise/heatwise-class-guided \
             --output-dir results/release-smoke
           python -m cwltool --validate results/release-smoke/cwl/workflow.cwl
           python -m cwltool --pack results/release-smoke/cwl/workflow.cwl > results/release-smoke/heatwise_class_guided.cwl
@@ -70,7 +70,7 @@ jobs:
           python -m cwltool --validate results/release-smoke/heatwise_material_top1.cwl
       - name: Exercise both packed release CWLs against exact version-tagged local Docker image
         run: |
-          docker tag heatwise/class-guided:0.3.2 ghcr.io/leonelgl/heatwise-class-guided:0.3.2
+          docker tag heatwise/class-guided:0.3.2 ghcr.io/esa-heatwise/heatwise-class-guided:0.3.2
           python -m cwltool --outdir results/packed-preprocess \
             results/release-smoke/heatwise_class_guided.cwl examples/job_synthetic.yml
           python tools/validate_outputs.py results/packed-preprocess/results

@@ -29,8 +29,8 @@ python tools/refresh_manifest_v032.py --check
 
 python tools/prepare_release.py \
   --version 0.3.2 \
-  --image ghcr.io/leonelgl/heatwise-class-guided:0.3.2 \
-  --repository-url https://github.com/LeonelGL/heatwise-class-guided \
+  --image ghcr.io/esa-heatwise/heatwise-class-guided:0.3.2 \
+  --repository-url https://github.com/ESA-Heatwise/heatwise-class-guided \
   --output-dir results/release-check
 
 python -m cwltool --pack results/release-check/cwl/workflow.cwl \

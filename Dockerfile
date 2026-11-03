@@ -1,6 +1,6 @@
 FROM python:3.11-slim-bookworm
 ARG RELEASE_VERSION=0.3.2
-ARG SOURCE_REPOSITORY=https://github.com/LeonelGL/heatwise-class-guided
+ARG SOURCE_REPOSITORY=https://github.com/ESA-Heatwise/heatwise-class-guided
 LABEL org.opencontainers.image.title="HEATWISE Class-guided Preprocessor"
 LABEL org.opencontainers.image.version="${RELEASE_VERSION}"
 LABEL org.opencontainers.image.source="${SOURCE_REPOSITORY}"

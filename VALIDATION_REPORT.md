@@ -9,7 +9,7 @@ bundled real-data Git blobs, their STAC references, 250-band Sepolia raster
 metadata and GUSL workbook sheets. Release preparation checks both packed
 CWL files with a versioned Docker image.
 
-- [Last verified `main` CI run](https://github.com/LeonelGL/heatwise-class-guided/actions/runs/41487807680)
+- [ESA-Heatwise baseline CI validation (3 November 2026)](https://github.com/ESA-Heatwise/heatwise-class-guided/actions/runs/41648836422)
 - [Real Sepolia v2/GUSL class-guided run, 28 October 2026](https://github.com/LeonelGL/heatwise-class-guided/actions/runs/40743012798)
 
 The real-scene run used 250 input image bands, yielding 124 usable output
