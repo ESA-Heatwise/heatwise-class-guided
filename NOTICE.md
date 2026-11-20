@@ -22,8 +22,12 @@ different organization or distribution channel.
 
 ## Software licensing
 
-A project-approved `LICENSE` has not yet been added. The formal GitHub
-Release workflow requires it before publishing versioned software assets.
+The project software is distributed under the MIT License; see `LICENSE`.
+The copyright notice identifies the University of Pavia. This license covers
+only software to which the named copyright holder can grant these rights;
+confirmation of institutional authorization remains the responsibility of the
+publisher. Third-party code and scientific datasets retain their respective
+rights and terms.
 
 Docker distributes the Python code and pinned dependencies, not copies
 of the reference GUSL workbook or Sepolia image. CWL stages those files
