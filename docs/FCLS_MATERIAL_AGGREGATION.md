@@ -73,12 +73,20 @@ The workflow `cwl/material_workflow.cwl` uses the same Docker image as the
 class-guided processor. An executable synthetic example is available:
 
 ```bash
+mkdir -p results
+
 python examples/make_postprocess_fixture.py results/material-fixture
-docker build -t heatwise/class-guided:0.3.2 .
+
+docker build -t heatwise/class-guided:0.3.3 .
+
 python -m cwltool --outdir results/material-check \
   cwl/material_workflow.cwl \
-  results/material-fixture/job_material_synthetic.yml
-python tools/validate_material_outputs.py results/material-check/results synthetic
+  results/material-fixture/job_material_synthetic.yml \
+  > results/material_check_output.json
+
+PRODUCTS_DIR=$(python -c 'import json; print(json.load(open("results/material_check_output.json"))["products"]["path"])')
+
+python tools/validate_material_outputs.py "$PRODUCTS_DIR" synthetic
 ```
 
 The FCLS-shaped fixture is synthetic and does not test the official FCLS
