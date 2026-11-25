@@ -43,7 +43,7 @@ jobs:
           python -m cwltool --validate cwl/material_postprocess.cwl
 
       - name: Build FULL/MASK3 dual-mode container
-        run: docker build -t heatwise/class-guided:0.3.2 .
+        run: docker build -t heatwise/class-guided:0.3.3 .
 
       - name: Run containerized CWL on synthetic STAC input
         run: |
@@ -91,7 +91,7 @@ jobs:
       - name: Prepare v0.3.2 release CWLs without publishing
         run: |
           python tools/prepare_release.py \
-            --version 0.3.2 \
+            --version 0.3.3 \
             --image ghcr.io/esa-heatwise/heatwise-class-guided:0.3.2 \
             --repository-url https://github.com/ESA-Heatwise/heatwise-class-guided \
             --output-dir results/release-smoke
@@ -112,8 +112,8 @@ jobs:
 
       - name: Exercise both packed release CWLs against exact version-tagged local Docker image
         run: |
-          docker tag heatwise/class-guided:0.3.2 \
-            ghcr.io/esa-heatwise/heatwise-class-guided:0.3.2
+          docker tag heatwise/class-guided:0.3.3 \
+            ghcr.io/esa-heatwise/heatwise-class-guided:0.3.3
 
           python -m cwltool --outdir results/packed-preprocess \
             results/release-smoke/heatwise_class_guided.cwl \
