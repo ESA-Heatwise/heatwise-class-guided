@@ -14,7 +14,7 @@ arguments:
   - position: 0
     valueFrom: $(inputs.processor.path)
   - --output-dir
-  - results
+  - "."
 inputs:
   - id: input_catalog
     type: Directory
@@ -51,7 +51,7 @@ outputs:
   products:
     type: Directory
     outputBinding:
-      glob: results
+      glob: "."
 $namespaces:
   s: https://schema.org/
 s:softwareVersion: "0.3.2"
