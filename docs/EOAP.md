@@ -3,6 +3,8 @@
 The repository provides two separate CWL 1.2 workflows, sharing one Docker
 image. Both expose an output `Directory` called `products`.
 
+Since version 0.3.3, both processors write all generated products directly to the CWL working directory. The CommandLineTool retrieves that directory through `outputBinding.glob: "."`, following the EOAP stage-out requirement `req/app-pck-stage-out/output-stac`. Input files are staged separately. The actual output location is obtained from `products.path` in the CWL execution result rather than assuming a fixed subdirectory name.
+
 ## 1. Class-guided preprocessing
 
 **Workflow:** `cwl/workflow.cwl`  
@@ -25,7 +27,7 @@ The included real-data example is `examples/job_sepolia.yml`, which uses
 and `examples/config_sepolia_report.json`.
 
 ```bash
-docker build -t heatwise/class-guided:0.3.2 .
+docker build -t heatwise/class-guided:0.3.3 .
 python -m cwltool --outdir results/sepolia-cwl \
   cwl/workflow.cwl examples/job_sepolia.yml
 ```
