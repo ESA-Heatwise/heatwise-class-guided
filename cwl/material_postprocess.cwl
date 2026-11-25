@@ -12,7 +12,7 @@ baseCommand:
   - /app/aggregate_fcls_classes.py
 requirements:
   DockerRequirement:
-    dockerPull: heatwise/class-guided:0.3.2
+    dockerPull: heatwise/class-guided:0.3.3
 arguments:
   - --output-dir
   - "."
@@ -75,6 +75,6 @@ outputs:
       glob: "."
 $namespaces:
   s: https://schema.org/
-s:softwareVersion: "0.3.2"
-s:version: "0.3.2"
+s:softwareVersion: "0.3.3"
+s:version: "0.3.3"
 s:codeRepository: https://github.com/ESA-Heatwise/heatwise-class-guided
