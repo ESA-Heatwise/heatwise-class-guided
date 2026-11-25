@@ -1,7 +1,7 @@
 """Validate HEATWISE FULL/MASK3 dual selection with complete usable spectra.
 
 Run: python tools/validate_outputs.py results/ci/results
-Requires pystac for STAC validation. Does not execute or validate FCLS accuracy.
+Run: python tools/validate_outputs.py <products_directory>
 """
 from __future__ import annotations
 import json
