@@ -88,11 +88,11 @@ jobs:
       - name: Verify committed source SHA256 manifest
         run: python tools/refresh_manifest_v032.py --check
 
-      - name: Prepare v0.3.2 release CWLs without publishing
+      - name: Prepare v0.3.3 release CWLs without publishing
         run: |
           python tools/prepare_release.py \
             --version 0.3.3 \
-            --image ghcr.io/esa-heatwise/heatwise-class-guided:0.3.2 \
+            --image ghcr.io/esa-heatwise/heatwise-class-guided:0.3.3 \
             --repository-url https://github.com/ESA-Heatwise/heatwise-class-guided \
             --output-dir results/release-smoke
 
