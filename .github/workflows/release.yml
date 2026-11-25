@@ -1,3 +1,4 @@
+
 name: Release versioned EOAP
 
 on:
@@ -17,6 +18,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+
     steps:
       - name: Checkout tagged source
         uses: actions/checkout@v4
@@ -103,21 +105,37 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p results
+
           python -m cwltool \
             --outdir results/release-ci \
             release_dist/heatwise_class_guided.cwl \
-            examples/job_synthetic.yml
-          python tools/validate_outputs.py results/release-ci/results
+            examples/job_synthetic.yml \
+            > results/release_ci_output.json
+
+          cat results/release_ci_output.json
+
+          PRODUCTS_DIR=$(python -c 'import json; print(json.load(open("results/release_ci_output.json"))["products"]["path"])')
+
+          python tools/validate_outputs.py "$PRODUCTS_DIR"
 
       - name: Smoke-test material postprocessor with synthetic FCLS-shaped STAC input
         shell: bash
         run: |
           set -euo pipefail
+
           python examples/make_postprocess_fixture.py results/material-fixture
+
           python -m cwltool --outdir results/material-release-ci \
             release_dist/heatwise_material_top1.cwl \
-            results/material-fixture/job_material_synthetic.yml
-          python tools/validate_material_outputs.py results/material-release-ci/results synthetic
+            results/material-fixture/job_material_synthetic.yml \
+            > results/material_release_ci_output.json
+
+          cat results/material_release_ci_output.json
+
+          PRODUCTS_DIR=$(python -c 'import json; print(json.load(open("results/material_release_ci_output.json"))["products"]["path"])')
+
+          python tools/validate_material_outputs.py "$PRODUCTS_DIR" synthetic
 
       - name: Log in to GHCR
         shell: bash
@@ -146,3 +164,4 @@ jobs:
             README.md
             NOTICE.md
             LICENSE
+

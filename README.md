@@ -70,7 +70,7 @@ python class_guided_processor.py \
 Or use the containerized CWL:
 
 ```bash
-docker build -t heatwise/class-guided:0.3.2 .
+docker build -t heatwise/class-guided:0.3.3 .
 python -m cwltool --outdir results/sepolia-cwl \
   cwl/workflow.cwl examples/job_sepolia.yml
 ```
@@ -109,7 +109,7 @@ python tools/aggregate_fcls_classes.py \
 
 The `--acquisition-datetime` value must be a verified ISO 8601 timestamp with timezone; do not infer a time from Sepolia's known date. Use `--mode MASK3` only when FCLS used the MASK3 workbook.
 
-The postprocessor sums the abundance of all selected endmembers assigned to each material and then selects the dominant material. It writes `*_class_abundances_COG.tif`, `*_material_top1_COG.tif`, a class-label JSON file and STAC metadata. Details, including CWL invocation, are in [Material postprocessing](docs/FCLS_MATERIAL_AGGREGATION.md).
+The postprocessor sums the abundance of all selected endmembers assigned to each material and then selects the dominant material. It writes `*_class_abundances_COG.tif`, `*_material_top1_COG.tif`, a class-label JSON file and STAC metadata. Details, including  invocation, are in [Material postprocessing](docs/FCLS_MATERIAL_AGGREGATION.md).
 
 ## Tests and packaging
 

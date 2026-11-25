@@ -1,48 +1,78 @@
+
 name: Validate FULL + MASK3 class-guided processor and EOAP
+
 on:
   workflow_dispatch:
   push:
     branches:
       - main
   pull_request:
+
 permissions:
   contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Install pinned dependencies
         run: python -m pip install -r requirements.txt
+
       - name: Scientific regression and FULL/MASK3 dual-mode integration tests
         run: python -m pytest tests -q
+
       - name: Validate container CWL
         run: python -m cwltool --validate cwl/workflow.cwl
+
       - name: Validate local CWL
         run: python -m cwltool --validate cwl/local/workflow.cwl
+
       - name: Validate material postprocessing workflow and CommandLineTool
         run: |
           python -m cwltool --validate cwl/material_workflow.cwl
           python -m cwltool --validate cwl/material_postprocess.cwl
+
       - name: Build FULL/MASK3 dual-mode container
-        run: docker build -t heatwise/class-guided:0.3.2 .
+        run: docker build -t heatwise/class-guided:0.3.3 .
+
       - name: Run containerized CWL on synthetic STAC input
-        run: python -m cwltool --outdir results/ci cwl/workflow.cwl examples/job_synthetic.yml
+        run: |
+          mkdir -p results
+          python -m cwltool --outdir results/ci \
+            cwl/workflow.cwl examples/job_synthetic.yml \
+            > results/ci_output.json
+          cat results/ci_output.json
+
       - name: Validate dual-mode endmembers, optimized bands and STAC
-        run: python tools/validate_outputs.py results/ci/results
+        run: |
+          PRODUCTS_DIR=$(python -c 'import json; print(json.load(open("results/ci_output.json"))["products"]["path"])')
+          python tools/validate_outputs.py "$PRODUCTS_DIR"
+
       - name: Generate synthetic FCLS-shaped STAC stage-in without running FCLS
         run: python examples/make_postprocess_fixture.py results/material-fixture
+
       - name: Run independent post-FCLS material CWL in same production Docker image
         run: |
-          python -m cwltool --outdir results/material-ci cwl/material_workflow.cwl \
-            results/material-fixture/job_material_synthetic.yml
-          python tools/validate_material_outputs.py results/material-ci/results synthetic
+          python -m cwltool --outdir results/material-ci \
+            cwl/material_workflow.cwl \
+            results/material-fixture/job_material_synthetic.yml \
+            > results/material_ci_output.json
+
+          cat results/material_ci_output.json
+
+          PRODUCTS_DIR=$(python -c 'import json; print(json.load(open("results/material_ci_output.json"))["products"]["path"])')
+          python tools/validate_material_outputs.py "$PRODUCTS_DIR" synthetic
+
       - name: Compare host and slim-Docker scientific outputs
         shell: bash
         run: |
@@ -51,30 +81,57 @@ jobs:
             --gusl examples/synthetic/gusl_synthetic.xlsx \
             --config examples/synthetic_config.json \
             --output-dir results/host
-          python tools/compare_runtime_outputs.py results/host results/ci/results
+
+          PRODUCTS_DIR=$(python -c 'import json; print(json.load(open("results/ci_output.json"))["products"]["path"])')
+          python tools/compare_runtime_outputs.py results/host "$PRODUCTS_DIR"
 
       - name: Verify committed source SHA256 manifest
         run: python tools/refresh_manifest_v032.py --check
-      - name: Prepare v0.3.2 release CWLs without publishing
+
+      - name: Prepare v0.3.3 release CWLs without publishing
         run: |
           python tools/prepare_release.py \
-            --version 0.3.2 \
-            --image ghcr.io/esa-heatwise/heatwise-class-guided:0.3.2 \
+            --version 0.3.3 \
+            --image ghcr.io/esa-heatwise/heatwise-class-guided:0.3.3 \
             --repository-url https://github.com/ESA-Heatwise/heatwise-class-guided \
             --output-dir results/release-smoke
+
           python -m cwltool --validate results/release-smoke/cwl/workflow.cwl
-          python -m cwltool --pack results/release-smoke/cwl/workflow.cwl > results/release-smoke/heatwise_class_guided.cwl
+
+          python -m cwltool --pack results/release-smoke/cwl/workflow.cwl \
+            > results/release-smoke/heatwise_class_guided.cwl
+
           python -m cwltool --validate results/release-smoke/heatwise_class_guided.cwl
+
           python -m cwltool --validate results/release-smoke/cwl/material_workflow.cwl
-          python -m cwltool --pack results/release-smoke/cwl/material_workflow.cwl > results/release-smoke/heatwise_material_top1.cwl
+
+          python -m cwltool --pack results/release-smoke/cwl/material_workflow.cwl \
+            > results/release-smoke/heatwise_material_top1.cwl
+
           python -m cwltool --validate results/release-smoke/heatwise_material_top1.cwl
+
       - name: Exercise both packed release CWLs against exact version-tagged local Docker image
         run: |
-          docker tag heatwise/class-guided:0.3.2 ghcr.io/esa-heatwise/heatwise-class-guided:0.3.2
+          docker tag heatwise/class-guided:0.3.3 \
+            ghcr.io/esa-heatwise/heatwise-class-guided:0.3.3
+
           python -m cwltool --outdir results/packed-preprocess \
-            results/release-smoke/heatwise_class_guided.cwl examples/job_synthetic.yml
-          python tools/validate_outputs.py results/packed-preprocess/results
+            results/release-smoke/heatwise_class_guided.cwl \
+            examples/job_synthetic.yml \
+            > results/packed_preprocess_output.json
+
+          cat results/packed_preprocess_output.json
+
+          PREPROCESS_DIR=$(python -c 'import json; print(json.load(open("results/packed_preprocess_output.json"))["products"]["path"])')
+          python tools/validate_outputs.py "$PREPROCESS_DIR"
+
           python -m cwltool --outdir results/packed-material \
             results/release-smoke/heatwise_material_top1.cwl \
-            results/material-fixture/job_material_synthetic.yml
-          python tools/validate_material_outputs.py results/packed-material/results synthetic
+            results/material-fixture/job_material_synthetic.yml \
+            > results/packed_material_output.json
+
+          cat results/packed_material_output.json
+
+          MATERIAL_DIR=$(python -c 'import json; print(json.load(open("results/packed_material_output.json"))["products"]["path"])')
+          python tools/validate_material_outputs.py "$MATERIAL_DIR" synthetic
+

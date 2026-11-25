@@ -28,8 +28,8 @@ From the repository root, with the dependencies in `requirements.txt` installed:
 python tools/refresh_manifest_v032.py --check
 
 python tools/prepare_release.py \
-  --version 0.3.2 \
-  --image ghcr.io/esa-heatwise/heatwise-class-guided:0.3.2 \
+  --version 0.3.3 \
+  --image ghcr.io/esa-heatwise/heatwise-class-guided:0.3.3 \
   --repository-url https://github.com/ESA-Heatwise/heatwise-class-guided \
   --output-dir results/release-check
 

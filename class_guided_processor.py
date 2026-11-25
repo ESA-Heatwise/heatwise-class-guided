@@ -17,7 +17,7 @@ from scipy.interpolate import PchipInterpolator
 from scipy.optimize import linear_sum_assignment
 from sklearn.decomposition import PCA
 import yaml
-VERSION = "0.3.2"
+VERSION = "0.3.3"
 
 class Configurable:
     def __init__(self, overrides=None):

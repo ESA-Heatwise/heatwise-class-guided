@@ -14,7 +14,7 @@ arguments:
   - position: 0
     valueFrom: $(inputs.processor.path)
   - --output-dir
-  - results
+  - "."
 inputs:
   - id: input_catalog
     type: Directory
@@ -51,9 +51,9 @@ outputs:
   products:
     type: Directory
     outputBinding:
-      glob: results
+      glob: "."
 $namespaces:
   s: https://schema.org/
-s:softwareVersion: "0.3.2"
-s:version: "0.3.2"
+s:softwareVersion: "0.3.3"
+s:version: "0.3.3"
 s:codeRepository: https://github.com/ESA-Heatwise/heatwise-class-guided
