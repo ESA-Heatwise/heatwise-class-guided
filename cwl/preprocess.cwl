@@ -15,7 +15,7 @@ baseCommand:
   - /app/class_guided_processor.py
 requirements:
   DockerRequirement:
-    dockerPull: heatwise/class-guided:0.3.2
+    dockerPull: heatwise/class-guided:0.3.3
 arguments:
   - --output-dir
   - "."
