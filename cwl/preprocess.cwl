@@ -18,7 +18,7 @@ requirements:
     dockerPull: heatwise/class-guided:0.3.2
 arguments:
   - --output-dir
-  - results
+  - "."
 inputs:
   - id: input_catalog
     type: Directory
@@ -48,7 +48,7 @@ outputs:
   products:
     type: Directory
     outputBinding:
-      glob: results
+      glob: "."
 $namespaces:
   s: https://schema.org/
 s:softwareVersion: "0.3.2"
